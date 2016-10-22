@@ -1,0 +1,181 @@
+/*
+ ============================================================================
+ Name        : dvr.c
+ Author      : Akshat Mishra
+ Version     :
+ Copyright   : Your copyright notice
+ Description : Hello World in C, Ansi-style
+ ============================================================================
+ */
+
+#include<stdio.h>
+#include<limits.h>
+#define max 999;
+int costmat[20][20];
+struct node
+{
+    unsigned dist[20];
+    unsigned from[20];
+}rt[10];
+int cal (int); Name        : dvr.c
+Author      : Akshat Mishra
+Version     :
+Copyright   : Your copyright notice
+Description : Hello World in C, Ansi-style
+============================================================================
+*/
+
+#include<stdio.h>
+#include<limits.h>
+#define max 999;
+int costmat[20][20];
+struct node
+{
+   unsigned dist[20];
+   unsigned from[20];
+}rt[10];
+int cal (int);
+int scout();
+int print(int);
+int main()
+{
+   int nodes,i,j,n=0;
+   printf("\nEnter the number of nodes : ");
+   scanf("%d",&nodes);
+   printf("\nEnter the cost matrix :\n");
+   for(i=0;i<nodes;i++)
+   {
+       for(j=0;j<nodes;j++)
+       {
+           scanf("%d",&costmat[i][j]);
+           costmat[i][i]=0;//the cost of selfloop is always 0
+           rt[i].dist[j]=costmat[i][j];//initialise the distance equal to cost matrix
+           rt[i].from[j]=j;
+       }
+   }
+ cal(nodes);
+ print(nodes);
+ scout();
+ cal(nodes);
+ print(nodes);
+   return 0;
+}
+int cal(int nodes){
+	int count=0,i,j,k;
+	do
+	        {
+	            count=0;
+	            for(i=0;i<nodes;i++)//choose vertex k and we calculate the direct distance from the node i to k using the cost matrix
+	            //and add the distance from k to node j
+	            for(j=0;j<nodes;j++)
+	            for(k=0;k<nodes;k++)
+	                if(rt[i].dist[j]>costmat[i][k]+rt[k].dist[j])
+	                {//calculate minimum distance
+	                    rt[i].dist[j]=rt[i].dist[k]+rt[k].dist[j];
+	                    rt[i].from[j]=k;
+	                    count++;
+	                }
+	        }while(count!=0);
+	return 0;
+}
+int scout(){
+   int i=0,j=0;
+   printf("enter router no.");
+   scanf("%d",&i);
+   scanf("%d",&j);
+   printf("%d,%d",i,j);
+   costmat[i][j]=999;
+   rt[i].dist[j]=costmat[i][j];
+   rt[i].from[j]=j;
+   costmat[j][i]=999;
+   rt[j].dist[i]=costmat[j][i];
+   rt[j].from[i]=i;
+   return 0;
+}
+int print(int nodes){
+   int i,j;
+   for(i=0;i<nodes;i++)
+       {
+           printf("\n\n For router %d\n",i);
+           for(j=0;j<nodes;j++)
+           {
+               printf("\t\n node %d via %d Distance %d ",j,rt[i].from[j],rt[i].dist[j]);
+           }
+       }
+   printf("\n\n");
+   return 0;
+}
+int scout();
+int main()
+{
+    int nodes,i,j,n=0;
+    printf("\nEnter the number of nodes : ");
+    scanf("%d",&nodes);
+    printf("\nEnter the cost matrix :\n");
+    for(i=0;i<nodes;i++)
+    {
+        for(j=0;j<nodes;j++)
+        {
+            scanf("%d",&costmat[i][j]);
+            costmat[i][i]=0;//the cost of selfloop is always 0
+            rt[i].dist[j]=costmat[i][j];//initialise the distance equal to cost matrix
+            rt[i].from[j]=j;
+        }
+    }
+    do{
+    	n=0;
+    	cal(nodes);
+    	printf("want to break link yes(1),No(0)");
+    	scanf("%d",&n);
+    	printf("%d",n);
+    	if(n) {
+    		scout();
+    	}
+    }while(n!=0);
+
+
+
+        for(i=0;i<nodes;i++)
+        {
+            printf("\n\n For router %c\n",i+65);
+            for(j=0;j<nodes;j++)
+            {
+                printf("\t\n node %c via %c Distance %d ",j+65,rt[i].from[j]+65,rt[i].dist[j]);
+            }
+        }
+    printf("\n\n");
+
+    return 0;
+}
+int cal(int nodes){
+	int count=0,i,j,k;
+	do
+	        {
+	            count=0;
+	            for(i=0;i<nodes;i++)//choose vertex k and we calculate the direct distance from the node i to k using the cost matrix
+	            //and add the distance from k to node j
+	            for(j=0;j<nodes;j++)
+	            for(k=0;k<nodes;k++)
+	                if(rt[i].dist[j]>costmat[i][k]+rt[k].dist[j])
+	                {//calculate minimum distance
+	                    rt[i].dist[j]=rt[i].dist[k]+rt[k].dist[j];
+	                    rt[i].from[j]=k;
+	                    count++;
+	                }
+	        }while(count!=0);
+	return 0;
+}
+int scout(){
+	char x=0,y=0;
+	 int a=0,b=0;
+	 printf("enter router name form (In capital)\n");
+	 scanf("%c",&x);
+	 printf("to y");
+	 scanf("%c",&y);
+	  b=y-65;
+	  a=x-65;
+	 costmat[a][b]= max;
+	 costmat[b][a]= max;
+	return 0;
+
+}
